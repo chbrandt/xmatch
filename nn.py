@@ -1,71 +1,10 @@
 # -*- coding=utf-8 -*-
-
 import logging
 
-def gc(A_coord, B_coord, radius, parallel=False, nprocs=None):
-    '''
-    Match catalogs by position within a radial distance
-
-    Input:
-     - radius : float or ~astropy.Quantity
-            If a float is given it is assumed to be in 'arcsec'
-    '''
-    from astropy.units import Quantity
-    radius = Quantity(radius,'arcsec')
-    out = _gc_serial(A_coord, B_coord, radius)
-    return out
-great_circle = gc
-
-def _gc_serial(A_coord, B_coord, radius):
-    '''
-    '''
-    from astropy.coordinates import search_around_sky
-
-    def assert_input(A_coord, B_coord, radius):
-        from astropy.coordinates import SkyCoord
-        from astropy.units import Quantity
-        assert isinstance(A_coord,SkyCoord), "Was expecting an ~astropy.coordinates.SkyCoord instance for 'A_coord'."
-        assert isinstance(B_coord,SkyCoord), "Was expecting an ~astropy.coordinates.SkyCoord instance for 'B_coord'."
-        assert isinstance(radius,Quantity), "Was expecting an ~astropy.units.Quantity instance for 'radius'"
-    assert_input(A_coord, B_coord, radius)
-
-    logging.info("Searching B_coord {1} objects, {0} neighbors.".format(len(B_coord),len(A_coord)))
-    _prau = A_coord.ra.unit
-    _pdecu = A_coord.dec.unit
-    _nrau = B_coord.ra.unit
-    _ndecu = B_coord.dec.unit
-    logging.debug("Unit of coordinates being matched: ({0},{1}) and ({2},{3})".format(_prau,_pdecu,_nrau,_ndecu))
-
-    match_A_gc_idx, match_B_gc_idx, match_gc_sep, _d3d = search_around_sky(A_coord, B_coord, radius)
-
-    from booq.utils import stats
-    _sts = stats.basic(match_gc_sep.value)
-    logging.info("Basic stats of distances between matchings: {}".format(_sts))
-
-    assert len(match_A_gc_idx) == len(match_B_gc_idx)
-
-    return (match_A_gc_idx, match_B_gc_idx, match_gc_sep)
-
+import astropy
+import numpy
 
 def nn(A_coord, B_coord, parallel=False, nprocs=None):
-    """
-    """
-    if parallel and nprocs > 0:
-        from booq.utils import parallel
-        dview = parallel.setup(nprocs)
-        if not dview:
-            return None
-
-        logging.debug("Running in parallel with {} processors.".format(len(dview)))
-        match_A_nn_idx, match_A_nn_sep = _nn_parallel(A_coord, B_coord, dview=dview)
-    else:
-        logging.debug("Running in serial mode.")
-        match_A_nn_idx, match_A_nn_sep = _nn_serial(A_coord, B_coord)
-
-    return (match_A_nn_idx, match_A_nn_sep)
-nearest_neighbor = nn
-
-def _nn_serial(A_coord, B_coord):
     """
     Nearest-Neighbor search
 
@@ -80,6 +19,22 @@ def _nn_serial(A_coord, B_coord):
             array of respective (to 'A_coord') index entries in 'B_coord'
             , array of respective pair distances
     """
+    if parallel and nprocs > 0:
+        from .utils import parallel
+        dview = parallel.setup(nprocs)
+        if not dview:
+            return None
+
+        logging.debug("Running in parallel with {} processors.".format(len(dview)))
+        match_A_nn_idx, match_A_nn_sep = _nn_parallel(A_coord, B_coord, dview=dview)
+    else:
+        logging.debug("Running in serial mode.")
+        match_A_nn_idx, match_A_nn_sep = _nn_serial(A_coord, B_coord)
+
+    return match_A_nn_idx, match_A_nn_sep
+
+
+def _nn_serial(A_coord, B_coord):
 
     from astropy.coordinates import SkyCoord
     assert isinstance(A_coord,SkyCoord), "Was expecting a ~astropy.coordinates.SkyCoord instance."
@@ -95,7 +50,7 @@ def _nn_serial(A_coord, B_coord):
     from astropy.coordinates import match_coordinates_sky
     match_A_nn_idx, match_A_nn_sep, _d3d = match_coordinates_sky(A_coord,B_coord)
 
-    from booq.utils import stats
+    from .utils import stats
     _sts = stats.basic(match_A_nn_sep.value)
     logging.info("Basic stats of distances between matchings: {}".format(_sts))
 
@@ -106,8 +61,6 @@ def _nn_serial(A_coord, B_coord):
 
 
 def _nn_parallel(A_coord,B_coord,dview=None):
-    """
-    """
 
     assert dview, "A cluster clients hub, ie. 'dview', must be given."
 

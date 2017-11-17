@@ -29,37 +29,36 @@ products = SubProducts()
 
 # ------------------------------------------------------------------------------
 
-import time
-class timewith():
-    def __init__(self, name=''):
-        self.name = name
-        self.start = time.time()
-
-    @property
-    def elapsed(self):
-        return time.time() - self.start
-
-    def checkpoint(self, name=''):
-        return '{timer} {checkpoint} took {elapsed} seconds'.format(
-            timer=self.name,
-            checkpoint=name,
-            elapsed=self.elapsed,
-        ).strip()
-
-    def __enter__(self):
-        return self
-
-    def __exit__(self, type, value, traceback):
-        self.checkpoint('finished')
-        pass
-
+# import time
+# class timewith():
+#     def __init__(self, name=''):
+#         self.name = name
+#         self.start = time.time()
+#
+#     @property
+#     def elapsed(self):
+#         return time.time() - self.start
+#
+#     def checkpoint(self, name=''):
+#         return '{timer} {checkpoint} took {elapsed} seconds'.format(
+#             timer=self.name,
+#             checkpoint=name,
+#             elapsed=self.elapsed,
+#         ).strip()
+#
+#     def __enter__(self):
+#         return self
+#
+#     def __exit__(self, type, value, traceback):
+#         self.checkpoint('finished')
+#         pass
 # ------------------------------------------------------------------------------
 
 from booq.coordinates.skycoords import skycoords
 from booq.utils import list_contents_are_equal
 
 def xmatch(catalog_A, catalog_B, columns_A=None, columns_B=None, radius=None,
-            separation_unit='arcsec', method='gc', output_minimal=True,
+            separation_unit='arcsec', method='gc',
             parallel=False, nprocs=None):
     """
     Input:
@@ -72,6 +71,9 @@ def xmatch(catalog_A, catalog_B, columns_A=None, columns_B=None, radius=None,
     Output:
      - matched_catalog : ~pandas.DataFrame
     """
+    
+    output_minimal=True
+
     from pandas import DataFrame
     assert isinstance(catalog_A,DataFrame)
     assert isinstance(catalog_B,DataFrame)
@@ -115,47 +117,44 @@ def xmatch(catalog_A, catalog_B, columns_A=None, columns_B=None, radius=None,
     assert check_columns(catalog_B.columns, list(catB_cols_map.values())), \
             "I looked for columns {} but could not find them in catalog_B.".format(list(catB_cols_map.values()))
 
-    timer = timewith('X-matching:')
+    # timer = timewith('X-matching:')
 
     A_coord = skycoords(catalog_A[ catA_cols_map.get('ra') ].values,
                         catalog_A[ catA_cols_map.get('dec') ].values,
                         unit='degree')
-    tictac = timer.checkpoint('done with SkyCoords for catalog-A')
-    log(tictac)
+    # tictac = timer.checkpoint('done with SkyCoords for catalog-A')
+    # log(tictac)
 
     B_coord = skycoords(catalog_B[ catB_cols_map.get('ra') ].values,
                         catalog_B[ catB_cols_map.get('dec') ].values,
                         unit='degree')
-    tictac = timer.checkpoint('done with SkyCoords for catalog-B')
-    log(tictac)
+    # tictac = timer.checkpoint('done with SkyCoords for catalog-B')
+    # log(tictac)
 
-    from booq.table import ATable
-    from booq.catalogs import xmatch
+    # from booq.table import ATable
+    # from booq.catalogs import xmatch
     if method == 'nn':
-        match_A_nn_idx, match_A_nn_sep = xmatch.nn(A_coord, B_coord, parallel=parallel, nprocs=nprocs)
-        tictac = timer.checkpoint('done with first matching')
-        log(tictac)
 
+        match_A_nn_idx, match_A_nn_sep = xmatch.nn(A_coord, B_coord, parallel=parallel, nprocs=nprocs)
+        # tictac = timer.checkpoint('done with first matching')
+        # log(tictac)
         from numpy import unique
         log("Total number of matchings A-B): {}".format(len(match_A_nn_idx)))
         log("`- number of uniques: {}".format(len(unique(match_A_nn_idx))))
-
         k = 'Dist_AB'
-        v = ATable({'separation':match_A_nn_sep})
+        v = Table({'separation':match_A_nn_sep})
         products[ k ] = v
         log("Partial '{0}' product on stack".format(k),"separation between A-)B")
 
 
         match_B_nn_idx, match_B_nn_sep = xmatch.nn(B_coord, A_coord, parallel=parallel, nprocs=nprocs)
-        tictac = timer.checkpoint('done with second matching')
-        log(tictac)
-
+        # tictac = timer.checkpoint('done with second matching')
+        # log(tictac)
         from numpy import unique
         log("Total number of matchings B-A): {}".format(len(match_B_nn_idx)))
         log("`- number of uniques: {}".format(len(unique(match_B_nn_idx))))
-
         k = 'Dist_BA'
-        v = ATable({'separation':match_B_nn_sep})
+        v = Table({'separation':match_B_nn_sep})
         products[ k ] = v
         log("Partial '{0}' product on stack".format(k),"separation between B-)A")
 
@@ -183,7 +182,7 @@ def xmatch(catalog_A, catalog_B, columns_A=None, columns_B=None, radius=None,
         log("`- number of uniques in B: {}".format(len(unique(match_B_gc_idx))))
 
         k = 'Dist_ABA'
-        v = ATable({'separation':match_gc_sep})
+        v = Table({'separation':match_gc_sep})
         products[ k ] = v
         log("Partial '{0}' product on stack".format(k),"separation between (A-B)")
 
