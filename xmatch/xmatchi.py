@@ -1,4 +1,6 @@
 # -*- coding=utf-8 -*-
+from __future__ import absolute_import
+
 # ------------------------------------------------------------------------------
 # from booq import log
 # logging = log.init(debug=True)
@@ -53,9 +55,32 @@ products = SubProducts()
 #         self.checkpoint('finished')
 #         pass
 # ------------------------------------------------------------------------------
+def skycoords(ra, dec, unit='degree'):
+    '''
+    Return a ~astropy.coordinates.SkyCoord object
+    '''
+    logging.debug("input::{0!s}".format(locals()))
+    from astropy.coordinates import SkyCoord
+    from astropy import units
+    unit = units.Unit(unit)
+    return SkyCoord(ra=ra, dec=dec, unit=unit)
 
-from booq.coordinates.skycoords import skycoords
-from booq.utils import list_contents_are_equal
+# def split_array(arrei, N):
+#     from booq.utils import arrays
+#     __doc__ = arrays.split.__doc__
+#     return arrays.split(arrei, N)
+#
+# def join_array(arrei):
+#     from booq.utils import arrays
+#     __doc__ = arrays.join.__doc__
+#     return arrays.join(arrei)
+
+# from booq.coordinates.skycoords import skycoords
+# from booq.utils import list_contents_are_equal
+from astropy.table import Table
+
+from .nn import nn
+from .gc import gc
 
 def xmatch(catalog_A, catalog_B, columns_A=None, columns_B=None, radius=None,
             separation_unit='arcsec', method='gc',
@@ -71,7 +96,7 @@ def xmatch(catalog_A, catalog_B, columns_A=None, columns_B=None, radius=None,
     Output:
      - matched_catalog : ~pandas.DataFrame
     """
-    
+
     output_minimal=True
 
     from pandas import DataFrame
@@ -135,7 +160,7 @@ def xmatch(catalog_A, catalog_B, columns_A=None, columns_B=None, radius=None,
     # from booq.catalogs import xmatch
     if method == 'nn':
 
-        match_A_nn_idx, match_A_nn_sep = xmatch.nn(A_coord, B_coord, parallel=parallel, nprocs=nprocs)
+        match_A_nn_idx, match_A_nn_sep = nn(A_coord, B_coord, parallel=parallel, nprocs=nprocs)
         # tictac = timer.checkpoint('done with first matching')
         # log(tictac)
         from numpy import unique
@@ -147,7 +172,7 @@ def xmatch(catalog_A, catalog_B, columns_A=None, columns_B=None, radius=None,
         log("Partial '{0}' product on stack".format(k),"separation between A-)B")
 
 
-        match_B_nn_idx, match_B_nn_sep = xmatch.nn(B_coord, A_coord, parallel=parallel, nprocs=nprocs)
+        match_B_nn_idx, match_B_nn_sep = nn(B_coord, A_coord, parallel=parallel, nprocs=nprocs)
         # tictac = timer.checkpoint('done with second matching')
         # log(tictac)
         from numpy import unique
@@ -171,10 +196,10 @@ def xmatch(catalog_A, catalog_B, columns_A=None, columns_B=None, radius=None,
     else:
         assert method == 'gc' and radius
 
-        match_A_gc_idx, match_B_gc_idx, match_gc_sep = xmatch.gc(A_coord, B_coord, radius)
+        match_A_gc_idx, match_B_gc_idx, match_gc_sep = gc(A_coord, B_coord, radius)
 
-        tictac = timer.checkpoint('done with matching')
-        log(tictac)
+        # tictac = timer.checkpoint('done with matching')
+        # log(tictac)
 
         from numpy import unique
         log("Total number of matchings A-B): {}".format(len(match_A_gc_idx)))
@@ -209,7 +234,7 @@ def xmatch(catalog_A, catalog_B, columns_A=None, columns_B=None, radius=None,
     matched_catalog = merge_catalogs(catalog_A, catalog_B,
                                      df_matched_idx, catB_cols_map.get('id'))
 
-    timer.checkpoint('done with merging the catalogs')
+    # timer.checkpoint('done with merging the catalogs')
 
     return matched_catalog
 
@@ -266,7 +291,6 @@ def merge_catalogs(A,B,df_matched_idx,B_id_column=None):
 
     B_matched = B_matched.set_index('A_idx')
 
-    from pandas import DataFrame,concat
     df = concat([ A, B_matched, AB_match ], axis=1, keys=['A','B','AB'])
 
     return df
