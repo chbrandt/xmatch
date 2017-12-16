@@ -51,7 +51,7 @@ def _nn_serial(A_coord, B_coord):
     match_A_nn_idx, match_A_nn_sep, _d3d = match_coordinates_sky(A_coord,B_coord)
 
     from .utils import stats
-    _sts = stats.basic(match_A_nn_sep.value)
+    _sts = stats(match_A_nn_sep.value)
     logging.info("Basic stats of distances between matchings: {}".format(_sts))
 
     assert len(match_A_nn_idx) == len(A_coord)

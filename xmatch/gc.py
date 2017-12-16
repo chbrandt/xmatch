@@ -14,12 +14,12 @@ def gc(A_coord, B_coord, radius):
     '''
     from astropy.units import Quantity
     if not isinstance(radius,Quantity):
-    try:
-        radius = float(radius)
-        radius = Quantity(radius,'arcsec')
-    except Exception as e:
-        print("Error: Got exception {}\n".format(e))
-        return None
+        try:
+            radius = float(radius)
+            radius = Quantity(radius,'arcsec')
+        except Exception as e:
+            print("Error: Got exception {}\n".format(e))
+            return None
     return _gc_serial(A_coord, B_coord, radius)
 
 
@@ -45,7 +45,7 @@ def _gc_serial(A_coord, B_coord, radius):
     match_A_gc_idx, match_B_gc_idx, match_gc_sep, _d3d = search_around_sky(A_coord, B_coord, radius)
 
     from .utils import stats
-    _sts = stats.basic(match_gc_sep.value)
+    _sts = stats(match_gc_sep.value)
     logging.info("Basic stats of distances between matchings: {}".format(_sts))
 
     assert len(match_A_gc_idx) == len(match_B_gc_idx)

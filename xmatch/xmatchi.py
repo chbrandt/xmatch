@@ -84,7 +84,7 @@ from .gc import gc
 
 def xmatch(catalog_A, catalog_B, columns_A=None, columns_B=None, radius=None,
             separation_unit='arcsec', method='gc',
-            parallel=False, nprocs=None):
+            parallel=False, nprocs=None, snr_column=None):
     """
     Input:
      - catalog_A, catalog_B : ~pandas.DataFrame
@@ -98,6 +98,9 @@ def xmatch(catalog_A, catalog_B, columns_A=None, columns_B=None, radius=None,
     """
 
     output_minimal=True
+
+    if snr_column:
+        assert snr_column in catalog_B.columns
 
     from pandas import DataFrame
     assert isinstance(catalog_A,DataFrame)
@@ -213,13 +216,19 @@ def xmatch(catalog_A, catalog_B, columns_A=None, columns_B=None, radius=None,
 
         del A_coord,B_coord
 
-        if separation_unit == 'arcsec':
-            match_gc_sep = match_gc_sep.arcsec
+        if snr_column is None:
+            if separation_unit == 'arcsec':
+                match_gc_sep = match_gc_sep.arcsec
+            else:
+                match_gc_sep = match_gc_sep.degree
+            df_matched_idx = select_pairs(match_A_gc_idx, match_B_gc_idx, match_gc_sep)
         else:
-            match_gc_sep = match_gc_sep.degree
+            snr = catalog_B[snr_column].values
+            snr_match = snr[match_B_gc_idx]
+            df_matched_idx = select_snr(match_A_gc_idx, match_B_gc_idx, snr_match)
 
-        df_matched_idx = select_pairs(match_A_gc_idx, match_B_gc_idx, match_gc_sep)
         del match_A_gc_idx, match_B_gc_idx, match_gc_sep
+
 
     # By this point, 'df_matched_idx' is a DataFrame containing:
     # 'A_idx' : positional indexes from table 'A'
@@ -231,14 +240,125 @@ def xmatch(catalog_A, catalog_B, columns_A=None, columns_B=None, radius=None,
     if output_minimal:
         catalog_A = catalog_A[list(catA_cols_map.values())]
         catalog_B = catalog_B[list(catB_cols_map.values())]
-    matched_catalog = merge_catalogs(catalog_A, catalog_B,
-                                     df_matched_idx, catB_cols_map.get('id'))
+
+    if snr_column is not None:
+        matched_catalog = merge_catalogs_snr(catalog_A, catalog_B,
+                                             df_matched_idx, catB_cols_map.get('id'))
+        matched_catalog.drop_duplicates([('B','RA'),('B','DEC')], inplace=True)
+    else:
+        matched_catalog = merge_catalogs(catalog_A, catalog_B,
+                                         df_matched_idx, catB_cols_map.get('id'))
 
     # timer.checkpoint('done with merging the catalogs')
 
     return matched_catalog
 
-# ---
+
+def merge_catalogs_snr(A,B,df_matched_idx,B_id_column=None):
+    '''
+    Tables 'A' and 'B' are 'left' joined according to 'df_matched_idx'
+
+    'df_matched_idx' is a table with columns:
+    - 'A_idx', representing the primary-key for catalog 'A'
+    - 'B_idx', representing the primary-key for catalog 'B'
+    - 'separation', distances between matches
+    - 'duplicates' (optional), the ';'-separated list of multiple matches
+    - 'distances' (optional), the ';'-separated list of duplicates' separation
+
+    If 'B_id_column' is given, it should be the name of object IDs column in 'B'
+
+    Return the joined from A,B and separation provided by 'df_matched_idx'
+    '''
+    from pandas import DataFrame,concat
+
+    AB_match = DataFrame({'snr':df_matched_idx['snr'].values},
+                         index=df_matched_idx['A_idx'].values )
+
+    if 'duplicates' in df_matched_idx.columns:
+        assert 'snrs' in df_matched_idx.columns
+
+        if B_id_column in B.columns:
+
+            for i,row in df_matched_idx.iterrows():
+
+                entry_ids = row['duplicates']
+                entry_sep = row['snrs']
+                # print('ENTRIES: "{}" , "{}"'.format(entry_ids, entry_sep))
+                if entry_ids is None or len(entry_ids) == 0 or entry_ids.lower() == 'none':
+                    assert entry_sep == entry_ids, \
+                        "Distances '{}' expected to be None".format(entry_sep)
+                    continue
+                # print('CONTINS: "{}" , "{}"'.format(entry_ids, entry_sep))
+
+                # entry_ids are the former position (row number) in table
+                inds = [ int(n) for n in entry_ids.split(';') ]
+                ids = ';'.join([ str(n) for n in B[B_id_column].iloc[inds] ])
+
+                assert len(ids.split(';')) == len(entry_sep.split(';'))
+
+                df_matched_idx.loc[i,'duplicates'] = ids
+                df_matched_idx.loc[i,'snrs'] = entry_sep
+
+        AB_match.loc[:,'duplicates'] = df_matched_idx['duplicates'].values
+        AB_match.loc[:,'snrs'] = df_matched_idx['snrs'].values
+
+    B_matched = B.iloc[df_matched_idx['B_idx']]
+    B_matched.loc[:,'A_idx'] = df_matched_idx['A_idx'].values
+
+    B_matched = B_matched.set_index('A_idx')
+
+    df = concat([ A, B_matched, AB_match ], axis=1, keys=['A','B','AB'])
+
+    return df
+
+
+def select_snr(match_A_gc_idx, match_B_gc_idx, snr):
+    '''
+    Return table with 'match_A_gc_idx' unique values as index
+
+    The output table contains five columns:
+    - 'A_idx', 'match_A_gc_idx' unique values
+    - 'B_idx', 'match_B_gc_idx' value of the corresponding nearest match
+    - 'separation': distance between the nearest A-B matches
+    - 'duplicates': if multiple 'A_idx', the corresponding 'B_idx' values
+    - 'distances' : if multiple 'A_idx', the corresponding 'separation' values
+    '''
+    from pandas import DataFrame
+    df = DataFrame({'A_idx': match_A_gc_idx, 'B_idx': match_B_gc_idx,
+                    'snr': snr,
+                    'duplicates': None, 'snrs': None})
+
+    idx_to_drop = []
+    for gname,gdf in df.groupby('A_idx'):
+
+        if len(gdf) == 1:
+            continue
+
+        to_drop = gdf['snr'] < gdf['snr'].max()
+        if len(to_drop) == 0:  # "There should be at least one entry to drop; {!s}".format(gdf)
+            to_keep = (gdf['snr'] * 0).astype(bool)
+            to_keep.iloc[0] = True
+
+            to_drop = to_keep[~to_keep].index
+            to_keep = to_keep[to_keep].index
+        else:
+            to_keep = to_drop[~to_drop].index
+            to_drop = to_drop[to_drop].index
+
+        entries_to_drop = df.iloc[to_drop]
+        B_idx_duplicated = entries_to_drop['B_idx'].values.tolist()
+        df.loc[to_keep,'duplicates'] = ';'.join([ str(i) for i in B_idx_duplicated ])
+        B_sep_duplicated = entries_to_drop['snr'].values.tolist()
+        df.loc[to_keep,'snrs'] = ';'.join([ str(i) for i in B_sep_duplicated ])
+        del entries_to_drop
+
+        idx_to_drop.extend(to_drop.tolist())
+
+    # Notice that 'B_idx' may still have duplicates, only 'A_idx' was cleaned from duplicates!
+    df.drop(idx_to_drop, inplace=True)
+
+    return df
+
 
 def merge_catalogs(A,B,df_matched_idx,B_id_column=None):
     '''
@@ -295,7 +415,6 @@ def merge_catalogs(A,B,df_matched_idx,B_id_column=None):
 
     return df
 
-# ---
 
 def select_pairs(match_A_gc_idx, match_B_gc_idx, match_gc_sep):
     '''
