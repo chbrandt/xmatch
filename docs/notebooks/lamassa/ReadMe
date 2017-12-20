@@ -1,0 +1,688 @@
+J/ApJ/817/172        X-ray Observations of Stripe 82         (LaMassa+, 2016)
+================================================================================
+The 31 Deg^2^ release of the Stripe 82 X-ray survey: the point source catalog.
+    LaMassa S.M., Urry C.M., Cappelluti N., Bohringer H., Comastri A.,
+    Glikman E., Richards G., Ananna T., Brusa M., Cardamone C., Chon G.,
+    Civano F., Farrah D., Gilfanov M., Green P., Komossa S., Lira P.,
+    Makler M., Marchesi S., Pecoraro R., Ranalli P., Salvato M., Schawinski K.,
+    Stern D., Treister E., Viero M.
+   <Astrophys. J., 817, 172 (2016)>
+   =2016ApJ...817..172L    (SIMBAD/NED BibCode)
+================================================================================
+ADC_Keywords: Active gal. nuclei ; X-ray sources
+Keywords: catalogs - galaxies: active - quasars: general - surveys -
+          X-rays: general
+
+Abstract:
+    We release the next installment of the Stripe 82 X-ray survey
+    point-source catalog, which currently covers 31.3deg^2^ of the Sloan
+    Digital Sky Survey (SDSS) Stripe 82 Legacy field. In total, 6181
+    unique X-ray sources are significantly detected with XMM-Newton
+    (>5{sigma}) and Chandra (>4.5{sigma}). This catalog release includes
+    data from XMM-Newton cycle AO 13, which approximately doubled the
+    Stripe 82X survey area. The flux limits of the Stripe 82X survey are
+    8.7x10^-16^erg/s/cm2, 4.7x10^-15^erg/s/cm2, and 2.1x10^-15^erg/s/cm2
+    in the soft (0.5-2keV), hard (2-10keV), and full bands (0.5-10keV),
+    respectively, with approximate half-area survey flux limits of
+    5.4x10^-15^erg/s/cm2, 2.9x10^-14^erg/s/cm2, and 1.7x10^-14^erg/s/cm2.
+    We matched the X-ray source lists to available multi-wavelength
+    catalogs, including updated matches to the previous release of the
+    Stripe 82X survey; 88% of the sample is matched to a multi-wavelength
+    counterpart. Due to the wide area of Stripe 82X and rich ancillary
+    multi-wavelength data, including coadded SDSS photometry, mid-infrared
+    WISE coverage, near-infrared coverage from UKIDSS and VISTA Hemisphere
+    Survey, ultraviolet coverage from GALEX, radio coverage from FIRST,
+    and far-infrared coverage from Herschel, as well as existing ~30%
+    optical spectroscopic completeness, we are beginning to uncover rare
+    objects, such as obscured high-luminosity active galactic nuclei at
+    high-redshift. The Stripe 82X point source catalog is a valuable data
+    set for constraining how this population grows and evolves, as well as
+    for studying how they interact with the galaxies in which they live.
+
+Description:
+    XMM-Newton and Chandra X-ray sources matched to the SDSS, WISE,
+    UKIDSS, VHS, and GALEX catalogs using the maximum likelihood estimator
+    (MLE). X-ray sources are matched to FIRST and Herschel sources using a
+    nearest neighbor matching. Spectroscopic redshifts obtained from
+    dedicated ground-based follow-up are also published in this catalog.
+    The archival Chandra and archival and AO10 XMM-Newton catalogs
+    supersede those from the previous catalog release in 2013.
+
+File Summary:
+--------------------------------------------------------------------------------
+ FileName      Lrecl  Records   Explanations
+--------------------------------------------------------------------------------
+ReadMe            80        .   This file
+xmmao13.dat     1031     2862   XMM AO13 matched catalog
+xmmao10.dat     1038     2358   XMM archival and AO10 matched catalog
+chandra.dat     1048     1146   chandra matched catalog
+--------------------------------------------------------------------------------
+
+See also:
+ B/chandra        : Chandra Archive Log (CXC, 1999-2014)
+ IX/45            : Chandra Source Catalog, Release 1.1 (Evans+ 2012)
+ V/139            : SDSS Photometric Catalog, Release 9 (Adelman-McCarthy+ 2012)
+ II/314           : UKIDSS-DR8 LAS, GCS and DXS Surveys (Lawrence+ 2012)
+ II/319           : UKIDSS-DR9 LAS, GCS and DXS Surveys (Lawrence+ 2012)
+ II/312           : GALEX-DR5 (GR5) sources from AIS and MIS (Bianchi+ 2011)
+ II/311           : WISE All-Sky Data Release (Cutri+ 2012)
+ II/328           : AllWISE Data Release (Cutri+ 2013)
+ VIII/90          : The FIRST Survey Catalog, Version 12Feb16 (Becker+ 2012)
+ J/AJ/142/3       : 1.4GHz observations of Stripe 82 (Hodge+, 2011)
+ J/ApJ/769/125    : 1.4GHz radio variability in FIRST + SDSS Stripe 82
+                                                            (Hodge+, 2013)
+ J/MNRAS/436/3581 : X-ray observations of Stripe 82 (LaMassa+, 2013)
+ J/ApJS/210/22    : Herschel Stripe 82 survey (HerS) first catalog (Viero+ 2014)
+ J/MNRAS/440/476  : Low-redshift QSOs in SDSS Stripe 82 (Falomo+, 2014)
+ J/MNRAS/441/1802 : Low-redshift QSOs in SDSS Stripe 82 (Karhunen+, 2014)
+ J/ApJ/799/72     : Binary AGNs from the VLA Stripe 82 survey (Fu+, 2015)
+
+Byte-by-byte Description of file: xmmao13.dat
+--------------------------------------------------------------------------------
+   Bytes   Format Units      Label     Explanations
+--------------------------------------------------------------------------------
+    1-   4  I4    ---        Seq       Record number assigned to each XMM source
+    6-  15  I10   ---        ObsID     XMM observation identification number
+   17-  23  F7.3  deg        RAdeg     XMM right ascension (J2000)
+   25-  30  F6.3  deg        DEdeg     XMM declination (J2000)
+   32-  35  F4.1  arcsec   e_Pos       XMM positional error
+   37-  41  F5.1  arcsec     DistNN    Distance to nearest XMM source
+        43  I1    ---        ExtFlag   Flag to indicate if source is
+                                        extended (1)
+   45-  54  A10   ---        InXMM     Flag to indicate if source is found in
+                                        previous XMM observations (2)
+   56-  77  A22   ---        InChandra Flag to indicate if source is found in
+                                        Chandra (chandra.dat) catalog (2)
+   79-  85  F7.2 10-17W/m2   FSoft     Soft (0.5-2keV) flux
+   87-  93  F7.2 10-17W/m2 e_FSoft     Error on the soft flux
+   95- 101  F7.2  ct         CtSoft    Net counts detected in soft band
+  103- 109  F7.2  ---        SoftDetml Soft band detection significance,
+                                        det_ml = -ln(P_random) (3)
+  111- 117  F7.2 10-17W/m2   FHard     Hard (2-10keV) flux
+  119- 125  F7.2 10-17W/m2 e_FHard     Error on the hard flux
+  127- 133  F7.2  ct         CtHard    Net counts detected in hard band
+  135- 141  F7.2  ---        HardDetml Hard band detection significance,
+                                        det_ml = -ln(P_random) (3)
+  143- 149  F7.2 10-17W/m2   FFull     Full (2-10keV) flux
+  151- 157  F7.2 10-17W/m2 e_FFull     Error on the full flux
+  159- 165  F7.2  ct         CtFull    Net counts detected in full band
+  167- 173  F7.2  ---        FullDetml Full band detection significance,
+                                        det_ml = -ln(P_random) (3)
+  175- 181  F7.2  [10-7W]    logLSoft  Soft (0.5-2keV) X-ray luminosity
+  183- 189  F7.2  [10-7W]    logLHard  Hard (2-10keV) X-ray luminosity
+  191- 197  F7.2  [10-7W]    logLFull  Full (0.5-10keV) X-ray luminosity
+  199- 201  A3    ---        RejS      Set to 'yes' if SDSS counterpart failed
+                                        photometry quality control checks
+  203- 221  A19   ---        SDSS      SDSS ObjID
+  223- 230  F8.3  deg        RASdeg    ?=-999.000 SDSS right ascension (J2000)
+  232- 239  F8.3  deg        DESdeg    ?=-999.000 SDSS declination (J2000)
+  241- 247  F7.2  ---        RelS      ?=-999.00 MLE reliability of SDSS match to
+                                        X-ray source
+  249- 255  F7.2  arcsec     rS        ?=-999.00 Distance between X-ray and SDSS
+                                        sources
+  257- 259  A3    ---        CoaddS    Set to 'yes' if counterpart is from SDSS
+                                        coadded catalog
+  261- 267  F7.2  mag        umag      ?=-999.00 SDSS u magnitude
+  269- 275  F7.2  mag      e_umag      ?=-999.00 SDSS u magnitude error
+  277- 283  F7.2  mag        gmag      ?=-999.00 SDSS g magnitude
+  285- 291  F7.2  mag      e_gmag      ?=-999.00 SDSS g magnitude error
+  293- 299  F7.2  mag        rmag      ?=-999.00 SDSS r magnitude
+  301- 307  F7.2  mag      e_rmag      ?=-999.00 SDSS r magnitude error
+  309- 315  F7.2  mag        imag      ?=-999.00 SDSS i magnitude
+  317- 323  F7.2  mag      e_imag      ?=-999.00 SDSS i magnitude error
+  325- 331  F7.2  mag        zmag      ?=-999.00 SDSS z magnitude
+  333- 339  F7.2  mag      e_zmag      ?=-999.00 SDSS z magnitude error
+  341- 359  A19   ---        SpecID    SDSS SpecObjID
+  361- 366  A6    ---        Class     Spectroscopic class
+  368- 375  F8.3  ---        zsp       ?=-999 Spectroscopic redshift
+  377- 380  I4    ---      r_zsp       ?=-999 Source of spectroscopic
+                                        redshift (G1)
+  382- 400  A19   ---        WISE      WISE Name
+  402- 408  F7.2  deg        RAWdeg    ?=-999.00 WISE right ascension (J2000)
+  410- 416  F7.2  deg        DEWdeg    ?=-999.00 WISE declination (J2000)
+  418- 424  F7.2  arcsec   e_RAWdeg    ?=-999.00 WISE right ascension error
+  426- 432  F7.2  arcsec   e_DEWdeg    ?=-999.00 WISE declination error
+  434- 442  F9.4  ---        RelW      ?=-999.0000 MLE reliability of WISE match
+                                        to X-ray source
+  444- 450  F7.2  arcsec     rW        ?=-999.00 Distance between X-ray and WISE
+                                        sources
+  452- 458  F7.2  mag        W1mag     ?=-999.00 WISE W1 magnitude (5)
+  460- 466  F7.2  mag      e_W1mag     ?=-999.00 WISE W1 error
+  468- 474  F7.2  ---        W1SNR     ?=-999.00 WISE W1 SNR (6)
+  476- 482  F7.2  mag        W2mag     ?=-999.00 WISE W2 magnitude (5)
+  484- 490  F7.2  mag      e_W2mag     ?=-999.00 WISE W2 error
+  492- 498  F7.2  ---        W2SNR     ?=-999.00 WISE W2 SNR (6)
+  500- 506  F7.2  mag        W3mag     ?=-999.00 WISE W3 magnitude (5)
+  508- 514  F7.2  mag      e_W3mag     ?=-999.00 WISE W3 error
+  516- 522  F7.2  ---        W3SNR     ?=-999.00 WISE W3 SNR (6)
+  524- 530  F7.2  mag        W4mag     ?=-999.00 WISE W4 magnitude (5)
+  532- 538  F7.2  mag      e_W4mag     ?=-999.00 WISE W4 error
+  540- 546  F7.2  ---        W4SNR     ?=-999.00 WISE W4 SNR (6)
+  548- 550  A3    ---        ExtW      Set to 'yes' if extended WISE source
+  552- 554  A3    ---        RejW      Set to 'yes' if WISE counterpart failed
+                                        photometry quality control checks
+  556- 567  A12   ---        UKIDSS    UKIDSS ID
+  569- 576  F8.3  deg        RAUdeg    ?=-999.000 UKIDSS right ascension (J2000)
+  578- 585  F8.3  deg        DEUdeg    ?=-999.000 UKIDSS declination (J2000)
+  587- 594  F8.3  ---        RelU      ?=-999.000 MLE reliability of UKIDSS match
+                                        to X-ray source
+  596- 602  F7.2  arcsec     rU        ?=-999.00 Distance between X-ray and UKIDSS
+                                        sources
+  604- 610  F7.2  mag        Ymag      ?=-999.00 UKIDSS Y magnitude
+  612- 618  F7.2  mag      e_Ymag      ?=-999.00 UKIDSS Y magnitude error
+  620- 626  F7.2  mag        Jmag      ?=-999.00 UKIDSS J magnitude
+  628- 634  F7.2  mag      e_Jmag      ?=-999.00 UKIDSS J magnitude error
+  636- 642  F7.2  mag        Hmag      ?=-999.00 UKIDSS H magnitude
+  644- 650  F7.2  mag      e_Hmag      ?=-999.00 UKIDSS H magnitude error
+  652- 658  F7.2  mag        Kmag      ?=-999.00 UKIDSS K magnitude
+  660- 666  F7.2  mag      e_Kmag      ?=-999.00 UKIDSS K magnitude error
+  668- 670  A3    ---        RejU      Set to 'yes' if UKIDSS counterpart
+                                        failed photometry quality control checks
+  672- 683  A12   ---        VHS       VHS ID
+  685- 692  F8.3  deg        RAVdeg    ?=-999.000 VHS right ascension (J2000)
+  694- 701  F8.3  deg        DEVdeg    ?=-999.000 VHS declination (J2000)
+  703- 710  F8.3  ---        RelV      ?=-999.000 MLE reliability of VHS match
+                                        to X-ray source
+  712- 718  F7.2  arcsec     rV        ?=-999.00 Distance between X-ray and VHS
+                                        sources
+  720- 726  F7.2  mag        JVmag     ?=-999.00 VHS J magnitude
+  728- 734  F7.2  mag      e_JVmag     ?=-999.00 VHS J magnitude error
+  736- 742  F7.2  mag        HVmag     ?=-999.00 VHS H magnitude
+  744- 750  F7.2  mag      e_HVmag     ?=-999.00 VHS H magnitude error
+  752- 758  F7.2  mag        KVmag     ?=-999.00 VHS K magnitude
+  760- 766  F7.2  mag      e_KVmag     ?=-999.00 VHS K magnitude error
+  768- 770  A3    ---        RejV      Set to 'yes' if VHS counterpart failed
+                                        photometry quality control checks
+  772- 791  A20   ---        GALEX     GALEX ObjID
+  793- 800  F8.3  deg        RAGdeg    ?=-999.000 GALEX right ascension (J2000)
+  802- 809  F8.3  deg        DEGdeg    ?=-999.000 GALEX declination (J2000)
+  811- 817  F7.2  arcsec   e_NUVPos    ?=-999.00 GALEX NUV positional error
+  819- 825  F7.2  arcsec   e_FUVPos    ?=-999.00 GALEX FUV positional error
+  827- 833  F7.2  ---        RelG      ?=-999.00 MLE reliability of GALEX match
+                                        to X-ray source
+  835- 841  F7.2  arcsec     rG        ?=-999.00 Distance between X-ray and GALEX
+                                        sources
+  843- 849  F7.2  mag        NUV       ?=-999.00 GALEX NUV magnitude
+  851- 857  F7.2  mag      e_NUV       ?=-999.00 GALEX NUV magnitude error
+  859- 865  F7.2  mag        FUV       ?=-999.00 GALEX FUV magnitude
+  867- 873  F7.2  mag      e_FUV       ?=-999.00 GALEX FUV magnitude error
+  875- 897  A23   ---        FIRST     Name of FIRST counterpart
+  899- 906  F8.3  deg        RAFdeg    ?=-999.000 FIRST right ascension (J2000)
+  908- 915  F8.3  deg        DEFdeg    ?=-999.000 FIRST declination (J2000)
+  917- 923  F7.2  arcsec     rF        ?=-999.00 Distance between X-ray and FIRST
+                                        sources
+  925- 931  F7.2  mJy        F1.4GHz   ?=-999.00 FIRST 1.4GHz flux density
+  933- 939  F7.2  mJy      e_F1.4GHz   ?=-999.00 FIRST 1.4GHZ flux density error
+  941- 947  F7.2  deg        RAHdeg    ?=-999.00 Herschel right ascension (J2000)
+  949- 955  F7.2  deg        DEHdeg    ?=-999.00 Herschel declination (J2000)
+  957- 963  F7.2  arcsec     rH        ?=-999.00 Distance between X-ray and
+                                        Herschel sources
+  965- 971  F7.2  mJy        F250      ?=-999.00 Herschel 250um flux density
+  973- 979  F7.2  mJy      e_F250      ?=-999.00 Herschel 250um flux density error
+  981- 987  F7.2  mJy        F350      ?=-999.00 Herschel 350um flux density
+  989- 995  F7.2  mJy      e_F350      ?=-999.00 Herschel 350um flux density error
+  997-1003  F7.2  mJy        F500      ?=-999.00 Herschel 500um flux density
+ 1005-1011  F7.2  mJy      e_F500      ?=-999.00 Herschel 500um flux density error
+ 1013-1020  A8    ---        XMMAO10CP Flag to indicate if counterpart is
+                                        promoted match (7)
+ 1022-1029  A8    ---        ChCP      Flag to indicate if counterpart is
+                                        promoted match (8)
+      1031  I1    ---        CPCoord   Flag to indicate if multiwavelength
+                                        coordinates are consistent (9)
+--------------------------------------------------------------------------------
+Note (1):  Flag to indicate if source is extended as follows:
+  0 = point-like in all bands
+  1 = extended in soft (0.5-2keV) band; point-like in other bands
+  2 = extended in full (0.5-10keV) band; point-like in other bands
+  3 = extended in hard (2-10keV) band; point like in other bands
+  4 = extended in soft and full bands; point-like in hard band
+  5 = extended in soft and hard bands; point-like in full band
+  6 = extended in hard and full bands; point-like in soft band
+Note (2): If source is found in archival XMM observations, 'InXMM' is set to
+  'yes' and record number of XMM source is given. If source is found in archival
+  Chandra observations, 'InChandra' is set to 'yes' and the MSID number(s)
+  of corresponding Chandra source(s) is (are) given.
+Note (3): det_ml>=15 in at least one band for source to be included in the
+  catalog, and for luminosities to be reported in the catalog for that band.
+Note (5): magnitude from profile-fitting photometry unless the WISE_ext flag is
+  set to 'yes', in which case the magnitudes are associated with elliptical
+  apertures
+Note (6): WISE magnitude if upper limit if SNR<2.
+Note (7): If non-null, the multi-wavelength counterpart was promoted as a match
+  since the same X-ray source detected in the XMM archival catalog, and
+  matched independently to multi-wavelength catalogs, was found to have a
+  reliable counterpart.
+  Flag indicates which multi-wavelength counterpart is such a promoted match:
+   1 = SDSS counterpart found but photometry rejected for failing quality
+        control checks
+   2 = SDSS
+   3 = redshift
+   4 = WISE counterpart found but rejected for failing quality control checks
+   5 = WISE
+   6 = UKIDSS
+   7 = VHS
+   8 = GALEX
+Note (8): Same as note 7, but for promoted matches found from the archival
+   Chandra catalog.
+Note (9): Set to 0 if multi-wavelength counterpart coordinates are consistent
+   within 2" (SDSS, UKIDSS, VHS, FIRST) or 3" (WISE, GALEX, Herschel);
+   otherwise flag is set to 1.
+--------------------------------------------------------------------------------
+
+Byte-by-byte Description of file: xmmao10.dat
+--------------------------------------------------------------------------------
+   Bytes   Format Units      Label      Explanations
+--------------------------------------------------------------------------------
+    1-   4  I4    ---        Seq        Record number assigned to each XMM
+                                         source
+    6-  15  I10   ---        ObsID      XMM observation identification number
+   17-  23  F7.3  deg        RAdeg      XMM right ascension (J2000)
+   25-  30  F6.3  deg        DEdeg      XMM declination (J2000)
+   32-  35  F4.1  arcsec   e_Pos        XMM positional error
+   37-  41  F5.1  arcsec     DistNN     Distance to nearest XMM source
+        43  I1    ---        ExtFlag    Flag to indicate if source is
+                                         extended (1)
+   45-  54  A10   ---        InXMM      Flag to indicate if source is found in
+                                         previous XMM observations (2)
+   56-  77  A22   ---        InChandra  Flag to indicate if source is found in
+                                         Chandra (chandra.dat) catalog (2)
+   79-  81  A3    ---        RemLogNS   Flag to indicate if source is removed
+                                         from LogN-LogS calculation (3)
+   83-  89  F7.2 10-17W/m2   FSoft      Soft (0.5-2keV) flux
+   91-  97  F7.2 10-17W/m2 e_FSoft      Error on the soft flux
+   99- 105  F7.2  ct         CtSoft     Net counts detected in soft band
+  107- 114  F8.2  ---        SoftDetml  Soft band detection significance,
+                                         det_ml = -ln(P_random) (4)
+  116- 122  F7.2 10-17W/m2   FHard      Hard (2-10keV) flux
+  124- 130  F7.2 10-17W/m2 e_FHard      Error on the hard flux
+  132- 138  F7.2  ct         CtHard     Net counts detected in hard band
+  140- 147  F8.2  ---        HardDetml  Hard band detection significance,
+                                         det_ml = -ln(P_random) (4)
+  149- 155  F7.2 10-17W/m2   FFull      Full (2-10keV) flux
+  157- 163  F7.2 10-17W/m2 e_FFull      Error on the full flux
+  165- 171  F7.2  ct         CtFull     Net counts detected in full band
+  173- 180  F8.2  ---        FullDetml  Full band detection significance,
+                                         det_ml = -ln(P_random) (4)
+  182- 188  F7.2  [10-7W]    logLSoft   Soft (0.5-2keV) X-ray luminosity
+  190- 196  F7.2  [10-7W]    logLHard   Hard (2-10keV) X-ray luminosity
+  198- 204  F7.2  [10-7W]    logLFull   Full (0.5-10keV) X-ray luminosity
+  206- 208  A3    ---        RejS       Set to 'yes' if SDSS counterpart failed
+                                         photometry quality control checks
+  210- 228  A19   ---        SDSS       SDSS ObjID
+  230- 237  F8.3  deg        RASdeg     ?=-999.000 SDSS right ascension (J2000)
+  239- 246  F8.3  deg        DESdeg     ?=-999.000 SDSS declination (J2000)
+  248- 254  F7.2  ---        RelS       ?=-999.00 MLE reliability of SDSS match
+                                         to X-ray source
+  256- 262  F7.2  arcsec     rS         ?=-999.00 Distance between X-ray and SDSS
+                                         sources
+  264- 266  A3    ---        CoaddS     Set to 'yes' if counterpart is from
+                                         SDSS coadded catalog
+  268- 274  F7.2  mag        umag       ?=-999.00 SDSS u magnitude
+  276- 282  F7.2  mag      e_umag       ?=-999.00 SDSS u magnitude error
+  284- 290  F7.2  mag        gmag       ?=-999.00 SDSS g magnitude
+  292- 298  F7.2  mag      e_gmag       ?=-999.00 SDSS g magnitude error
+  300- 306  F7.2  mag        rmag       ?=-999.00 SDSS r magnitude
+  308- 314  F7.2  mag      e_rmag       ?=-999.00 SDSS r magnitude error
+  316- 322  F7.2  mag        imag       ?=-999.00 SDSS i magnitude
+  324- 330  F7.2  mag      e_imag       ?=-999.00 SDSS i magnitude error
+  332- 338  F7.2  mag        zmag       ?=-999.00 SDSS z magnitude
+  340- 346  F7.2  mag      e_zmag       ?=-999.00 SDSS z magnitude error
+  348- 366  A19   ---        SpecID     SDSS SpecObjID
+  368- 373  A6    ---        Class      Spectroscopic class
+  375- 382  F8.3  ---        zsp        ?=-999.000 Spectroscopic redshift
+  384- 387  I4    ---      r_zsp        ?=-999 Source of spectroscopic
+                                         redshift (G1)
+  389- 407  A19   ---        WISE       WISE Name
+  409- 415  F7.2  deg        RAWdeg     ?=-999.00 WISE right ascension (J2000)
+  417- 423  F7.2  deg        DEWdeg     ?=-999.00 WISE declination (J2000)
+  425- 431  F7.2  arcsec   e_RAWdeg     ?=-999.00 WISE right ascension error
+  433- 439  F7.2  arcsec   e_DEWdeg     ?=-999.00 WISE declination error
+  441- 449  F9.4  ---        RelW       ?=-999.0000 MLE reliability of WISE match to
+                                         X-ray source
+  451- 457  F7.2  arcsec     rW         ?=-999.00 Distance between X-ray and WISE
+                                         sources
+  459- 465  F7.2  mag        W1mag      ?=-999.00 WISE W1 magnitude (6)
+  467- 473  F7.2  mag      e_W1mag      ?=-999.00 WISE W1 error
+  475- 481  F7.2  ---        W1SNR      ?=-999.00 WISE W1 SNR (7)
+  483- 489  F7.2  mag        W2mag      ?=-999.00 WISE W2 magnitude (6)
+  491- 497  F7.2  mag      e_W2mag      ?=-999.00 WISE W2 error
+  499- 505  F7.2  ---        W2SNR      ?=-999.00 WISE W2 SNR (7)
+  507- 513  F7.2  mag        W3mag      ?=-999.00 WISE W3 magnitude (6)
+  515- 521  F7.2  mag      e_W3mag      ?=-999.00 WISE W3 error
+  523- 529  F7.2  ---        W3SNR      ?=-999.00 WISE W3 SNR (7)
+  531- 537  F7.2  mag        W4mag      ?=-999.00 WISE W4 magnitude (6)
+  539- 545  F7.2  mag      e_W4mag      ?=-999.00 WISE W4 error
+  547- 553  F7.2  ---        W4SNR      ?=-999.00 WISE W4 SNR (7)
+  555- 557  A3    ---        ExtW       Set to 'yes' if extended WISE source
+  559- 561  A3    ---        RejW       Set to 'yes' if WISE counterpart failed
+                                         photometry quality control checks
+  563- 574  A12   ---        UKIDSS     UKIDSS ID
+  576- 583  F8.3  deg        RAUdeg     ?=-999.000 UKIDSS right ascension (J2000)
+  585- 592  F8.3  deg        DEUdeg     ?=-999.000 UKIDSS declination (J2000)
+  594- 601  F8.3  ---        RelU       ?=-999.000 MLE reliability of UKIDSS match
+                                         to X-ray source
+  603- 609  F7.2  arcsec     rU         ?=-999.00 Distance between X-ray and UKIDSS
+                                         sources
+  611- 617  F7.2  mag        Ymag       ?=-999.00 UKIDSS Y magnitude
+  619- 625  F7.2  mag      e_Ymag       ?=-999.00 UKIDSS Y magnitude error
+  627- 633  F7.2  mag        Jmag       ?=-999.00 UKIDSS J magnitude
+  635- 641  F7.2  mag      e_Jmag       ?=-999.00 UKIDSS J magnitude error
+  643- 649  F7.2  mag        Hmag       ?=-999.00 UKIDSS H magnitude
+  651- 657  F7.2  mag      e_Hmag       ?=-999.00 UKIDSS H magnitude error
+  659- 665  F7.2  mag        Kmag       ?=-999.00 UKIDSS K magnitude
+  667- 673  F7.2  mag      e_Kmag       ?=-999.00 UKIDSS K magnitude error
+  675- 677  A3    ---        RejU       Set to 'yes' if UKIDSS counterpart
+                                        failed photometry quality control checks
+  679- 690  A12   ---        VHS        VHS ID
+  692- 699  F8.3  deg        RAVdeg     ?=-999.000 VHS right ascension (J2000)
+  701- 708  F8.3  deg        DEVdeg     ?=-999.000 VHS declination (J2000)
+  710- 717  F8.3  ---        RelV       ?=-999.000 MLE reliability of VHS match
+                                         to X-ray source
+  719- 725  F7.2  arcsec     rV         ?=-999.00 Distance between X-ray and VHS
+                                         sources
+  727- 733  F7.2  mag        JVmag      ?=-999.00 VHS J magnitude
+  735- 741  F7.2  mag      e_JVmag      ?=-999.00 VHS J magnitude error
+  743- 749  F7.2  mag        HVmag      ?=-999.00 VHS H magnitude
+  751- 757  F7.2  mag      e_HVmag      ?=-999.00 VHS H magnitude error
+  759- 765  F7.2  mag        KVmag      ?=-999.00 VHS K magnitude
+  767- 773  F7.2  mag      e_KVmag      ?=-999.00 VHS K magnitude error
+  775- 777  A3    ---        RejV       Set to 'yes' if VHS counterpart failed
+                                         photometry quality control checks
+  780- 798  A19   ---        GALEX      GALEX ObjID
+  800- 807  F8.3  deg        RAGdeg     ?=-999.000 GALEX right ascension (J2000)
+  809- 816  F8.3  deg        DEGdeg     ?=-999.000 GALEX declination (J2000)
+  818- 824  F7.2  arcsec   e_NUVPos     ?=-999.00 GALEX NUV positional error
+  826- 832  F7.2  arcsec   e_FUVPos     ?=-999.00 GALEX FUV positional error
+  834- 840  F7.2  ---        RelG       ?=-999.00 MLE reliability of GALEX match to
+                                         X-ray source
+  842- 848  F7.2  arcsec     rG         ?=-999.00 Distance between X-ray and GALEX
+                                         sources
+  850- 856  F7.2  mag        NUV        ?=-999.00 GALEX NUV magnitude
+  858- 864  F7.2  mag      e_NUV        ?=-999.00 GALEX NUV magnitude error
+  866- 872  F7.2  mag        FUV        ?=-999.00 GALEX FUV magnitude
+  874- 880  F7.2  mag      e_FUV        ?=-999.00 GALEX FUV magnitude error
+  882- 904  A23   ---        FIRST      Name of FIRST counterpart
+  906- 913  F8.3  deg        RAFdeg     ?=-999.000 FIRST right ascension (J2000)
+  915- 922  F8.3  deg        DEFdeg     ?=-999.000 FIRST declination (J2000)
+  924- 930  F7.2  arcsec     rF         ?=-999.00 Distance between X-ray and FIRST
+                                         sources
+  932- 938  F7.2  mJy        F1.4GHz    ?=-999.00 FIRST 1.4GHz flux density
+  940- 946  F7.2  mJy      e_F1.4GHz    ?=-999.00 FIRST 1.4GHZ flux density error
+  948- 954  F7.2  deg        RAHdeg     ?=-999.00 Herschel right ascension (J2000)
+  956- 962  F7.2  deg        DEHdeg     ?=-999.00 Herschel declination (J2000)
+  964- 970  F7.2  arcsec     rH         ?=-999.00 Distance between X-ray and
+                                         Herschel sources
+  972- 978  F7.2  mJy        F250       ?=-999.00 Herschel 250um flux density
+  980- 986  F7.2  mJy      e_F250       ?=-999.00 Herschel 250um flux density error
+  988- 994  F7.2  mJy        F350       ?=-999.00 Herschel 350um flux density
+  996-1002  F7.2  mJy      e_F350       ?=-999.00 Herschel 350um flux density error
+ 1004-1010  F7.2  mJy        F500       ?=-999.00 Herschel 500um flux density
+ 1012-1018  F7.2  mJy      e_F500       ?=-999.00 Herschel 500um flux density error
+ 1020-1027  A8    ---        ChCP       Flag to indicate if counterpart is
+                                         promoted match (8)
+ 1029-1036  A8    ---        XMMAO13CP  Flag to indicate if counterpart is
+                                         promoted match (9)
+      1038  I1    ---        CPCoord    Flag to indicate if multiwavelength
+                                         coordinates are consistent (10)
+--------------------------------------------------------------------------------
+Note (1): Flag to indicate if source is extended as follows:
+  0 = point-like in all bands
+  1 = extended in soft (0.5-2keV) band; point-like in other bands
+  2 = extended in full (0.5-10keV) band; point-like in other bands
+  3 = extended in hard (2-10keV) band; point like in other bands
+  4 = extended in soft and full bands; point-like in hard band
+  5 = extended in soft and hard bands; point-like in full band
+  6 = extended in hard and full bands; point-like in soft band
+Note (2): If source is found in archival XMM observations, 'InXMM' is set
+  to 'yes' and record number of XMM source is given. If source is found in
+  archival Chandra observations, 'InChandra' is set to 'yes' and the MSID
+  number(s) of corresponding Chandra source(s) is (are) given.
+Note (3): Source is removed from LogN-LogS relationship if it is target of
+  archival observation or if the observation overlaps the AO13 coverage area.
+Note (4): det_ml>=15 in at least one band for source to be included in the
+  catalog, and for luminosities to be reported in the catalog for that band.
+Note (6): magnitude from profile-fitting photometry unless the WISE_ext flag is
+  set to 'yes', in which case the magnitudes are associated with elliptical
+  apertures
+Note (7): WISE magnitude is upper limit if SNR<2.
+Note (8): If non-null, the multi-wavelength counterpart was promoted as a match
+  since the same X-ray source detected in the Chandra archival catalog, and
+  matched independently to multi-wavelength catalogs, was found to have a
+  reliable counterpart.
+  Flag indicates which multi-wavelength counterpart is such a promoted match:
+   1 = SDSS counterpart found but photometry rejected for failing quality
+        control checks
+   2 = SDSS
+   3 = redshift
+   4 = WISE counterpart found but rejected for failing quality control checks
+   5 = WISE
+   6 = UKIDSS
+   7 = VHS
+   8 = GALEX
+Note (9): Same as note 8, but for promoted matches found from the XMM AO13
+   catalog.
+Note (10): Set to 0 if multi-wavelength counterpart coordinates are consistent
+   within 2" (SDSS, UKIDSS, VHS, FIRST) or 3" (WISE, GALEX, Herschel);
+   otherwise flag is set to 1.
+--------------------------------------------------------------------------------
+
+Byte-by-byte Description of file: chandra.dat
+--------------------------------------------------------------------------------
+   Bytes Format Units        Label      Explanations
+--------------------------------------------------------------------------------
+    1-   6  I6    ---        MSID       Chandra Source Catalog identification
+                                         number
+    8-  17  I10   ---        ObsID      Chandra observation identification
+                                         number
+   19-  25  F7.3  deg        RAdeg      Chandra right ascension (J2000)
+   27-  32  F6.3  deg        DEdeg      Chandra declination (J2000)
+   34-  37  F4.1  arcsec   e_Pos        Chandra positional error
+   39-  44  F6.1  arcsec     DistNN     Distance to nearest Chandra source
+   46-  67  A22   ---        InAO10     Flag to indicate if source is found in
+                                         archival/AO10 XMM (xmmao10.dat)
+                                         catalog (1)
+   69-  90  A22   ---        InAO13     Flag to indicate if source is found in
+                                         AO13 XMM (xmmao13.dat) catalog (1)
+   92-  94  A3    ct         RemLogNS   Flag to indicate if source is removed
+                                         from LogN-LogS calculation (2)
+   96- 102  F7.2 10-17W/m2   FSoft      Soft (0.5-2keV) flux (3)
+  104- 110  F7.2 10-17W/m2 B_FSoft      ?=-999.00 Higher bound on the soft flux
+  112- 118  F7.2 10-17W/m2 b_FSoft      ?=-999.00 Lower bound on the soft flux
+  120- 126  F7.2  ct         CtSoft     Net counts detected in soft band
+  128- 134  F7.2 10-17W/m2   FHard      Hard (2-10keV) flux (3)
+  136- 142  F7.2 10-17W/m2 B_FHard      Higher bound on the hard flux
+  144- 150  F7.2 10-17W/m2 b_FHard      Lower bound on the hard flux
+  152- 158  F7.2  ct         CtHard     Net counts detected in hard band
+  160- 166  F7.2 10-17W/m2   FFull      Full (0.5-10keV) flux (3)
+  168- 174  F7.2 10-17W/m2 B_FFull      Higher bound on the full flux
+  176- 182  F7.2 10-17W/m2 b_FFull      Lower bound on the full flux
+  184- 190  F7.2  ct         CtFull     Net counts detected in the full band
+  192- 198  F7.2 [10-7W]     logLSoft   ?=-999.00 Soft (0.5-2keV) X-ray luminosity
+  200- 206  F7.2 [10-7W]     logLHard   ?=-999.00 Hard (2-10keV) X-ray luminosity
+  208- 214  F7.2 [10-7W]     logLFull   ?=-999.00 Full (0.5-10keV) X-ray luminosity
+  216- 218  A3    ---        RejS       Set to 'yes' if SDSS counterpart failed
+                                         photometry quality control checks
+  220- 238  A19   ---        SDSS       SDSS ObjID
+  240- 247  F8.3  deg        RASdeg     SDSS right ascension (J2000)
+  249- 256  F8.3  deg        DESdeg     SDSS declination (J2000)
+  258- 264  F7.2  ---        RelS       ?=-999.00 MLE reliability of SDSS match
+                                         to X-ray source
+  266- 272  F7.2  arcsec     rS         ?=-999.00 Distance between X-ray and SDSS
+                                         sources
+  274- 276  A3    ---        CoaddS     Set to 'yes' if counterpart is from SDSS
+                                         coadded catalog
+  278- 284  F7.2  mag        umag       ?=-999.00 SDSS u magnitude
+  286- 292  F7.2  mag      e_umag       ?=-999.00 SDSS u magnitude error
+  294- 300  F7.2  mag        gmag       ?=-999.00 SDSS g magnitude
+  302- 308  F7.2  mag      e_gmag       ?=-999.00 SDSS g magnitude error
+  310- 316  F7.2  mag        rmag       ?=-999.00 SDSS r magnitude
+  318- 324  F7.2  mag      e_rmag       ?=-999.00 SDSS r magnitude error
+  326- 332  F7.2  mag        imag       ?=-999.00 SDSS i magnitude
+  334- 340  F7.2  mag      e_imag       ?=-999.00 SDSS i magnitude error
+  342- 348  F7.2  mag        zmag       ?=-999.00 SDSS z magnitude
+  350- 356  F7.2  mag      e_zmag       ?=-999.00 SDSS z magnitude error
+  358- 376  A19   ---        SpecID     SDSS SpecObjID
+  378- 383  A6    ---        Class      Spectroscopic class
+  385- 392  F8.3  ---        zsp        ?=-999.000 Spectroscopic redshift
+  394- 397  I4    ---      r_zsp        ?=-999 Specroscopic z source (G1)
+  399- 417  A19   ---        WISE       WISE Name
+  419- 425  F7.2  deg        RAWdeg     ?=-999.00 WISE right ascension (J2000)
+  427- 433  F7.2  deg        DEWdeg     ?=-999.00 WISE declination (J2000)
+  435- 441  F7.2  arcsec   e_RAWdeg     ?=-999.00 WISE right ascension error
+  443- 449  F7.2  arcsec   e_DEWdeg     ?=-999.00 WISE declination error
+  451- 459  F9.4  ---        RelW       ?=-999.0000 MLE reliability of WISE match
+                                         to X-ray source
+  461- 467  F7.2  arcsec     rW         ?=-999.00 Distance between X-ray and WISE
+                                         sources
+  469- 475  F7.2  mag        W1mag      ?=-999.00 WISE W1 magnitude (5)
+  477- 483  F7.2  mag      e_W1mag      ?=-999.00 WISE W1 error
+  485- 491  F7.2  ---        W1SNR      ?=-999.00 WISE W1 SNR (6)
+  493- 499  F7.2  mag        W2mag      ?=-999.00 WISE W2 magnitude (5)
+  501- 507  F7.2  mag      e_W2mag      ?=-999.00 WISE W2 error
+  509- 515  F7.2  ---        W2SNR      ?=-999.00 WISE W2 SNR (6)
+  517- 523  F7.2  mag        W3mag      ?=-999.00 WISE W3 magnitude (5)
+  525- 531  F7.2  mag      e_W3mag      ?=-999.00 WISE W3 error
+  533- 539  F7.2  ---        W3SNR      ?=-999.00 WISE W3 SNR (6)
+  541- 547  F7.2  mag        W4mag      ?=-999.00 WISE W4 magnitude (5)
+  549- 555  F7.2  mag      e_W4mag      ?=-999.00 WISE W4 error
+  557- 563  F7.2  ---        W4SNR      ?=-999.00 WISE W4 SNR (6)
+  565- 567  A3    ---        ExtW       Set to 'yes' if extended WISE source
+  569- 571  A3    ---        RejW       Set to 'yes' if WISE counterpart failed
+                                         photometry quality control checks
+  573- 584  A12   ---        UKIDSS     UKIDSS ID
+  586- 593  F8.3  deg        RAUdeg     ?=-999.000 UKIDSS right ascension (J2000)
+  595- 602  F8.3  deg        DEUdeg     ?=-999.000 UKIDSS declination (J2000)
+  604- 611  F8.3  ---        RelU       ?=-999.000 MLE reliability of UKIDSS match
+                                         to X-ray source
+  613- 619  F7.2  arcsec     rU         ?=-999.00 Distance between X-ray and
+                                         UKIDSS sources
+  621- 627  F7.2  mag        Ymag       ?=-999.00 UKIDSS Y magnitude
+  629- 635  F7.2  mag      e_Ymag       ?=-999.00 UKIDSS Y magnitude error
+  637- 643  F7.2  mag        Jmag       ?=-999.00 UKIDSS J magnitude
+  645- 651  F7.2  mag      e_Jmag       ?=-999.00 UKIDSS J magnitude error
+  653- 659  F7.2  mag        Hmag       ?=-999.00 UKIDSS H magnitude
+  661- 667  F7.2  mag      e_Hmag       ?=-999.00 UKIDSS H magnitude error
+  669- 675  F7.2  mag        Kmag       ?=-999.00 UKIDSS K magnitude
+  677- 683  F7.2  mag      e_Kmag       ?=-999.00 UKIDSS K magnitude error
+  685- 687  A3    ---        RejU       Set to 'yes' if UKIDSS counterpart
+                                        failed photometry quality control checks
+  689- 700  A12   ---        VHS        VHS ID
+  702- 709  F8.3  deg        RAVdeg     ?=-999.000 VHS right ascension (J2000)
+  711- 718  F8.3  deg        DEVdeg     ?=-999.000 VHS declination (J2000)
+  720- 727  F8.3  ---        RelV       ?=-999.000 MLE reliability of VHS match to
+                                         X-ray source
+  729- 735  F7.2  arcsec     rV         ?=-999.00 Distance between X-ray and VHS
+                                         sources
+  737- 743  F7.2  mag        JVmag      ?=-999.00 VHS J magnitude
+  745- 751  F7.2  mag      e_JVmag      ?=-999.00 VHS J magnitude error
+  753- 759  F7.2  mag        HVmag      ?=-999.00 VHS H magnitude
+  761- 767  F7.2  mag      e_HVmag      ?=-999.00 VHS H magnitude error
+  769- 775  F7.2  mag        KVmag      ?=-999.00 VHS K magnitude
+  777- 783  F7.2  mag      e_KVmag      ?=-999.00 VHS K magnitude error
+  785- 787  A3    ---        RejV       Set to 'yes' if VHS counterpart failed
+                                         photometry quality control checks
+  790- 808  A19   ---        GALEX      GALEX ObjID
+  810- 817  F8.3  deg        RAGdeg     ?=-999.000 GALEX right ascension (J2000)
+  819- 826  F8.3  deg        DEGdeg     ?=-999.000 GALEX declination (J2000)
+  828- 834  F7.2  arcsec   e_NUVPos     ?=-999.00 GALEX NUV positional error
+  836- 842  F7.2  arcsec   e_FUVPos     ?=-999.00 GALEX FUV positional error
+  844- 850  F7.2  ---        RelG       ?=-999.00 MLE reliability of GALEX match to
+                                         X-ray source
+  852- 858  F7.2  arcsec     rG         ?=-999.00 Distance between X-ray and GALEX
+                                         sources
+  860- 866  F7.2  mag        NUV        ?=-999.00 GALEX NUV magnitude
+  868- 874  F7.2  mag      e_NUV        ?=-999.00 GALEX NUV magnitude error
+  876- 882  F7.2  mag        FUV        ?=-999.00 GALEX FUV magnitude
+  884- 890  F7.2  mag      e_FUV        ?=-999.00 GALEX FUV magnitude error
+  892- 914  A23   ---        FIRST      Name of FIRST counterpart
+  916- 923  F8.3  deg        RAFdeg     ?=-999.000 FIRST right ascension (J2000)
+  925- 932  F8.3  deg        DEFdeg     ?=-999.000 FIRST declination (J2000)
+  934- 940  F7.2  arcsec     rF         ?=-999.00 Distance between X-ray and FIRST
+                                         sources
+  942- 948  F7.2  mJy        F1.4GHz    ?=-999.00 FIRST 1.4GHz flux density
+  950- 956  F7.2  mJy      e_F1.4GHz    ?=-999.00 FIRST 1.4GHZ flux density error
+  958- 964  F7.2  deg        RAHdeg     ?=-999.00 Herschel right ascension (J2000)
+  966- 972  F7.2  deg        DEHdeg     ?=-999.00 Herschel declination (J2000)
+  974- 980  F7.2  arcsec     rH         ?=-999.00 Distance between X-ray and
+                                         Herschel sources
+  982- 988  F7.2  mJy        F250       ?=-999.00 Herschel 250um flux density
+  990- 996  F7.2  mJy      e_F250       ?=-999.00 Herschel 250um flux density error
+  998-1004  F7.2  mJy        F350       ?=-999.00 Herschel 350um flux density
+ 1006-1012  F7.2  mJy      e_F350       ?=-999.00 Herschel 350um flux density error
+ 1014-1020  F7.2  mJy        F500       ?=-999.00 Herschel 500um flux density
+ 1022-1028  F7.2  mJy      e_F500       ?=-999.00 Herschel 500um flux density error
+ 1030-1037  A8    ---        XMMAO10CP  Flag to indicate if counterpart is
+                                         promoted match (7)
+ 1039-1046  A8    ---        XMMAO13CP  Flag to indicate if counterpart is
+                                         promoted match (8)
+      1048  I1    ---        CPCoord    Flag to indicate if multiwavelength
+                                         coordinates are consistent (9)
+--------------------------------------------------------------------------------
+Note (1): If source is found in XMM catalogs, this flag is set to 'yes' and the
+   record number of the corresponding XMM source is given.
+Note (2): Source is removed from LogN-LogS relationship if it is target of
+   Chandra observation or if the observation overlaps the XMM coverage area.
+Note (3): Flux is reported if it is significant at >=4.5-sigma level. For lower
+   significance flux measurements, check the Chandra Source Catalog.
+Note (5): magnitude from profile-fitting photometry unless the WISE_ext flag is
+  set to 'yes', in which case the magnitudes are associated with elliptical
+  apertures.
+Note (6): WISE magnitude is upper limit if SNR<2.
+Note (7): If non-null, the multi-wavelength counterpart was promoted as a match
+  since the same X-ray source detected in the archival/AO10 XMM catalog, and
+  matched independently to multi-wavelength catalogs, was found to have a
+  reliable counterpart.
+  Flag indicates which multi-wavelength counterpart is such a promoted match
+   as follows:
+   1 = SDSS counterpart found but photometry rejected for failing quality
+        control checks
+   2 = SDSS
+   3 = redshift
+   4 = WISE counterpart found but rejected for failing quality control checks
+   5 = WISE, 2012, Cutri et al., Cat. II/311
+   6 = UKIDSS, 2012, Lawrence et al., Cat. II/314
+   7 = VHS (McMahon et al., 2013Msngr.154...35M, VISTA Hemisphere Survey)
+   8 = GALEX, 2011, Bianchi et al, Cat. II/312
+Note (8): Same as note 8, but for promoted matches found from the XMM AO13
+   catalog.
+Note (9): Set to 0 if multi-wavelength counterpart coordinates are consistent
+   within 2" (SDSS, UKIDSS, VHS, FIRST) or 3" (WISE, GALEX, Herschel);
+   otherwise flag is set to 1.
+--------------------------------------------------------------------------------
+
+Global notes:
+Note (G1): Spectroscopic redshift source as follows:
+   0 = SDSS DR9 (Ahn et al., 2012ApJS..203...21A, Cat. V/139)
+   1 = 2SLAQ (Croom et al., 2009, Cat. J/MNRAS/392/19)
+   2 = WiggleZ (Drinkwater et al., 2010, Cat. J/MNRAS/401/1429)
+   3 = DEEP2 (Newman et al., 2013ApJS..208....5N)
+   4 = SDSS spectrum re-fit/verified by us
+   5 = SDSS DR10 (Ahn et al., 2014ApJS..211...17A)
+   6 = Jiang et al. (2006, Cat. J/AJ/131/2788)
+   7 = WIYN HYDRA follow-up observations from 2012 Dec
+   8 = PRIMUS (Coil et al., 2011ApJ...741....8C)
+   9 = VLT ISAAC follow-up observations from 2013 Aug
+  10 = Keck NIRSPEC follow-up observations from 2013 Sep
+  11 = SDSS DR12 (Alam et al., 2015ApJS..219...12A)
+  12 = WIYN Hydra follow-up observations from 2013 Aug - Sep
+  13 = WIYN HYDRA follow-up observations from 2014 Jan
+  14 = WIYN HYDRA follow-up observations from 2014 Jun
+  15 = WIYN HYDRA follow-up observations from 2014 Jul
+  16 = WIYN HYDRA follow-up observations from 2014 Sep
+  17 = WIYN HYDRA follow-up observations from 2015 Jan
+  18 = Palomar DoubleSpec observations from 2014 Jul
+  19 = MMT Hectospec (Ross et al., 2012, Cat. J/ApJS/199/3)
+  20 = Palomar DoubleSpec observations from 2014 Dec
+  22 = 6dF (Jones et al., 2004MNRAS.355..747J and 2009MNRAS.399..683J,
+        Cat. VII/259)
+  23 = VVDS (Le Fevre et al., 2003, Proc. SPIE 4841, 1670 and
+        2005A&A...439..845L, Cat. III/250; Garilli et al., 2008A&A...486..683G;
+        Le Fevre et al., 2013A&A...559A..14L)
+--------------------------------------------------------------------------------
+
+Acknowledgements:
+    Stephanie LaMassa, stephanie.m.lamassa(at)nasa.gov
+    NASA Goddard Space Flight Center
+
+================================================================================
+(End) S. LaMassa [NASA Goddard Space Flight Center] P. Vannier [CDS] 04-Mar-2016
