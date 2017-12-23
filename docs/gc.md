@@ -1,19 +1,32 @@
-# Great circle cross-matching algorithm
 
-The fundamental characteristic of a great-circle (gc) cross-matching is the
-restriction on the region to search for counterparts, and that limiting region
-is defined by a *radius* parameter around each target source.
+[kdtree]: https://en.wikipedia.org/wiki/K-d_tree
 
-Whereas a *nn* algorithm will *always* find a counterpart for each and every
-target, the matching pair may be separated by a unreasonable distance.
-The *gc* algorithm on the other hand, by restricting the search region, may not
-find a counterpart for each target; and depending on the size of the search
-region, it may find multiple counterparts, to decide which one to take is a
-second step.
+# Great circle algorithm
 
-Typically, in the simplest scenario, the *nearest neighbour* is taken among the
-counterpart candidates found by the *great-circle* algorithm.
+The basic characteristic of a *great-circle* (hereafter `GC`) algorithm is the
+restriction on the region to search for counterparts, such region is limited
+by a *radius* parameter around each object in the target catalog.
 
-The great circle approach provides a better performant algorithm (O(N*logN))
-and provide a natural mechanism to sub-sample the datasets.
-Such sampling mechanism may then be used to dynamically define the best match.
+Besides adding a fundamental premise to the process -- i.e, it is worthless to
+search for non nearby objects --, `GC` performs computationaly better as the
+search space around each target is considerably small.
+From the computational point-of-view, such restriction allows us to make use of
+optimal data-structures to correlate our catalogs.
+
+The great-circle method may find multiple counterpart candidates inside the
+search radius around the target(s), and so a flitering process has to eventually
+be applied to decide which one of the candidates is to be considered the right match.
+In the simplest scenario, the *nearest neighbour* will be considered the right match.
+This approach is typically used when matching catalogs of same wavebandas,
+similar positional errors or sensitivity.
+
+An extension to the nearest-neighbour approach to select the best candidate when
+great-circle matches multiple candidates will be discussed in the next section,
+`Maximum Likelihood Estimator`, where other objects features (e.g, luminosity)
+are considered on estimating the correct counterpart.
+
+Here, below, I take the chance to review the (computational) data-structure working
+under a search-by-position algorithm.
+
+
+## Space-partitioning trees
