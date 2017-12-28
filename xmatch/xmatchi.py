@@ -197,7 +197,7 @@ def xmatch(catalog_A, catalog_B, columns_A=None, columns_B=None, radius=None,
         df_matched_idx = match_pairs(match_A_nn_idx, match_B_nn_idx, match_A_nn_sep)
 
     else:
-        assert method == 'gc' and radius
+        assert method == 'gc' and radius > 0
 
         match_A_gc_idx, match_B_gc_idx, match_gc_sep = gc(A_coord, B_coord, radius)
 
@@ -245,6 +245,9 @@ def xmatch(catalog_A, catalog_B, columns_A=None, columns_B=None, radius=None,
         matched_catalog = merge_catalogs_snr(catalog_A, catalog_B,
                                              df_matched_idx, catB_cols_map.get('id'))
         matched_catalog.drop_duplicates([('B','RA'),('B','DEC')], inplace=True)
+        null_idx = matched_catalog.loc[matched_catalog[('B','OBJID')].isnull()]
+        if len(null_idx):
+            matched_catalog.drop(null_idx.index, inplace=True)
     else:
         matched_catalog = merge_catalogs(catalog_A, catalog_B,
                                          df_matched_idx, catB_cols_map.get('id'))
@@ -324,39 +327,100 @@ def select_snr(match_A_gc_idx, match_B_gc_idx, snr):
     - 'distances' : if multiple 'A_idx', the corresponding 'separation' values
     '''
     from pandas import DataFrame
-    df = DataFrame({'A_idx': match_A_gc_idx, 'B_idx': match_B_gc_idx,
+
+    df = DataFrame({'A_idx': match_A_gc_idx,
+                    'B_idx': match_B_gc_idx,
                     'snr': snr,
                     'duplicates': None, 'snrs': None})
+    # print("Size of idx-df:",len(df))
 
-    idx_to_drop = []
-    for gname,gdf in df.groupby('A_idx'):
+    primary_entries = list()
+    duplicated_idx = set()
+    for gname, gdf in df.groupby('A_idx'):
 
-        if len(gdf) == 1:
+        if gname in duplicated_idx:
+            # print('GNAME already out', gname)
+            # dl = list(duplicated_idx)
+            # dl.sort()
+            # print('Duplicated', dl)
+            # raise
             continue
 
-        to_drop = gdf['snr'] < gdf['snr'].max()
-        if len(to_drop) == 0:  # "There should be at least one entry to drop; {!s}".format(gdf)
-            to_keep = (gdf['snr'] * 0).astype(bool)
-            to_keep.iloc[0] = True
+        if len(gdf) == 1:
+            # Notice that the "index" going to 'primary' is df's index
+            #
+            primary_entries.append(gdf.index[0])
+            continue
 
-            to_drop = to_keep[~to_keep].index
-            to_keep = to_keep[to_keep].index
-        else:
-            to_keep = to_drop[~to_drop].index
-            to_drop = to_drop[to_drop].index
+        to_keep = gdf['snr'] == gdf['snr'].max()
 
-        entries_to_drop = df.iloc[to_drop]
-        B_idx_duplicated = entries_to_drop['B_idx'].values.tolist()
-        df.loc[to_keep,'duplicates'] = ';'.join([ str(i) for i in B_idx_duplicated ])
-        B_sep_duplicated = entries_to_drop['snr'].values.tolist()
-        df.loc[to_keep,'snrs'] = ';'.join([ str(i) for i in B_sep_duplicated ])
-        del entries_to_drop
+        msg = "Indexes differ: {},{}".format(to_keep, gdf)
+        assert all(to_keep.index == gdf.index), msg
 
-        idx_to_drop.extend(to_drop.tolist())
+        if sum(to_keep) != 1:
+            assert 1 < sum(to_keep) <= len(gdf), "to-KEEP size error:\n{}\n{}\n".format(to_keep, gdf)
+            # print("VARIOUS to-KEEP:\n{}\n".format(to_keep))
+
+            # Notice that 'ikeep' is the index of 'df'
+            #
+            ikeep = to_keep[to_keep].index[0]
+            to_keep = to_keep * False
+            to_keep.loc[ikeep] = True
+
+        to_drop = ~to_keep
+
+        assert all(to_drop.index == gdf.index)
+        assert all(to_keep.index == gdf.index)
+
+        to_drop_i = to_drop[to_drop].index
+        to_keep_i = to_keep[to_keep].index
+
+        assert len(to_drop_i) == sum(to_drop)
+        assert len(to_keep_i) == sum(to_keep)
+        # print("\n{}\n{}\n".format(to_drop, to_keep))
+        # print("\n{}\n{}\n".format(to_drop_i, to_keep_i))
+
+        # print("TO-KEEP/DROP:", to_keep, to_drop)
+        # print('{}\n{}'.format(gname,gdf))
+
+        assert len(to_keep_i) == 1, "found more than one primary objects?: {}".format(to_keep)
+        assert sum(to_drop)+sum(to_keep) == len(gdf), "to_drop: {}\nto_keep: {}".format(to_drop, to_keep)
+
+        to_keep_i = to_keep_i[0]
+
+        # print('gname',gname)
+        # print('to-drop:\n',gdf.loc[to_drop, 'B_idx'])
+        # print('to-keep:\n',gdf.loc[to_keep, 'B_idx'])
+        # print()
+        # entries_to_drop = df.loc[to_drop]
+        # B_idx_duplicated = entries_to_drop['B_idx'].values  #.tolist()
+        B_idx_duplicated = gdf.loc[to_drop, 'B_idx'].values
+        df.loc[to_keep_i, 'duplicates'] = ';'.join([str(i) for i in B_idx_duplicated])
+
+        B_sep_duplicated = gdf.loc[to_drop, 'snr'].values
+        df.loc[to_keep_i, 'snrs'] = ';'.join([str(i) for i in B_sep_duplicated])
+
+        duplicated_idx = duplicated_idx.union(B_idx_duplicated.tolist())
+
+        # assert all(bi not in duplicated_idx for bi in B_idx_duplicated)
+        # msg = "Index to keep: '{}', indexes to drop: '{}', B_idx dup: {}".format(to_keep_i, to_drop_i, B_idx_duplicated)
+        # assert to_keep_i not in B_idx_duplicated, msg
+
+        primary_entries.append(to_keep_i)
 
     # Notice that 'B_idx' may still have duplicates, only 'A_idx' was cleaned from duplicates!
-    df.drop(idx_to_drop, inplace=True)
+    # idx_to_drop = df['A_idx'].isin(duplicated_idx)
+    # print("Size of df:",len(df))
+    # print("Size of dup indexes:",len(duplicated_idx))
+    # print("Size of indexes to keep:",len(primary_entries))
+    df = df.loc[primary_entries]
+    # print(df)
 
+    # dl = list(duplicated_idx)
+    # dl.sort()
+    # print('Duplicated', dl)
+    #
+    # print(df)
     return df
 
 
