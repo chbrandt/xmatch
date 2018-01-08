@@ -502,20 +502,47 @@ def select_pairs(match_A_gc_idx, match_B_gc_idx, match_gc_sep):
         if len(gdf) == 1:
             continue
 
-        to_drop = gdf['separation'] > gdf['separation'].min()
-        assert sum(to_drop) >= 1, "There should be at least one entry to drop; {!s}".format(gdf)
+        #to_drop = gdf['separation'] > gdf['separation'].min()
 
-        to_keep = to_drop[~to_drop].index
-        to_drop = to_drop[to_drop].index
+        to_keep = gdf['separation'] == gdf['separation'].min()
 
-        entries_to_drop = df.iloc[to_drop]
+        msg = "Indexes differ: {},{}".format(to_keep, gdf)
+        assert all(to_keep.index == gdf.index), msg
+
+        if sum(to_keep) != 1:
+            assert 1 < sum(to_keep) <= len(gdf), "to-KEEP size error:\n{}\n{}\n".format(to_keep, gdf)
+
+            # Notice that 'ikeep' is the index of 'df'
+            #
+            ikeep = to_keep[to_keep].index[0]
+            to_keep = to_keep * False
+            to_keep.loc[ikeep] = True
+
+        to_drop = ~to_keep
+
+        assert all(to_drop.index == gdf.index)
+        assert all(to_keep.index == gdf.index)
+
+        to_drop_i = to_drop[to_drop].index
+        to_keep_i = to_keep[to_keep].index
+
+        assert len(to_drop_i) == sum(to_drop)
+        assert len(to_keep_i) == sum(to_keep)
+###
+#        to_drop = gdf['separation'] > gdf['separation'].min()
+#        assert sum(to_drop) >= 1, "There should be at least one entry to drop; {!s}".format(gdf)
+#
+#        to_keep = to_drop[~to_drop].index
+#        to_drop = to_drop[to_drop].index
+
+        entries_to_drop = gdf.loc[to_drop]
         B_idx_duplicated = entries_to_drop['B_idx'].values.tolist()
-        df.loc[to_keep,'duplicates'] = ';'.join([ str(i) for i in B_idx_duplicated ])
+        df.loc[to_keep_i,'duplicates'] = ';'.join([ str(i) for i in B_idx_duplicated ])
         B_sep_duplicated = entries_to_drop['separation'].values.tolist()
-        df.loc[to_keep,'distances'] = ';'.join([ str(i) for i in B_sep_duplicated ])
+        df.loc[to_keep_i,'distances'] = ';'.join([ str(i) for i in B_sep_duplicated ])
         del entries_to_drop
 
-        idx_to_drop.extend(to_drop.tolist())
+        idx_to_drop.extend(list(to_drop_i))
 
     # Notice that 'B_idx' may still have duplicates, only 'A_idx' was cleaned from duplicates!
     df.drop(idx_to_drop, inplace=True)

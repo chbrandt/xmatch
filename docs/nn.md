@@ -125,7 +125,7 @@ coords_B <- build SkyCoord objects from 'RA','DEC'
 match_A <- find nearest-neighbor from A in B
 match_B <- find nearest-neighbor from B in A
 
-match_AB <- filter intersection matches between match_A & match_B
+match_AB <- filter intersection matches between match_A  match_B
 
 matched_catalog <- join A,B following match_AB
 ```
@@ -163,9 +163,9 @@ Considering the posistional errors between "A" and "B" to be independent,
 their combined errors is given by a sum in quadrature,
 
 $$
-   \epsilon &= \sqrt{err_A^2 + err_B^2} \\
-            &= \sqrt{20^2 + 20^2} \\
-            &= 28.2
+   \epsilon = \sqrt{err_A^2 + err_B^2} \\
+            = \sqrt{20^2 + 20^2} \\
+            = 28.2
 $$
 , which gives us a tolerance radius of $\delta_r = 28$ pixels.
 

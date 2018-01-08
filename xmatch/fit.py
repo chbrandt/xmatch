@@ -81,15 +81,18 @@ def compile_interpolation_function(x,y,normal=False):
 #         return interpolate.splev(x, tck, der=0)
 #     return f
 
-def surface_density(data,surface_area,return_hist=False):
+
+def surface_density(data, surface_area, return_hist=False):
     from numpy import histogram,diff
     assert data.ndim == 1
-
+    #print(data, surface_area)
     vec = data
     area_total = surface_area
 
     min_ = vec.min()
     max_ = vec.max()
+    #print(min_,max_)
+    #print(vec)
 
     h,b = histogram(vec, bins='auto', range=(min_,max_))
     h = h/area_total

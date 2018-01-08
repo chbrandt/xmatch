@@ -55,7 +55,7 @@ import sklearn
 import warnings
 warnings.filterwarnings(action='ignore')
 
-import booq
+#import booq
 import math
 
 def nearest_neighbors(cat,N=2):
@@ -130,7 +130,7 @@ def mle(catalog_A, catalog_B, columns_A=None, columns_B=None,
     # Alias
     feature = feature_column
 
-    from booq.pipelines.xmatch import xmatch
+    from .xmatchi import xmatch
     # Notice that the following 'ancillary' and 'background'
     # matched catalogs have the same index.
     # 'xmatch' returns the index of 'catalog_A'.
@@ -167,8 +167,9 @@ def mle(catalog_A, catalog_B, columns_A=None, columns_B=None,
                               columns_B=columns_B,
                               method='gc',radius=ro)
     # remove non-matching entries
-    # This sample is composed by all matched objects distant more then 'ri'
-    match_background = match_background.loc[match_ancillary.index]
+    non_matches = match_background.loc[:,('AB','separation')].isnull()
+    match_background = match_background.loc[~non_matches]
+#    match_background = match_background.loc[match_ancillary.index]
 
     background_sample = flatten_matches(match_background,
                                         ('A',columns_A['id']),
@@ -184,16 +185,20 @@ def mle(catalog_A, catalog_B, columns_A=None, columns_B=None,
     Area_annulus = math.pi * (ro**2 - ri**2)
     Area_annulus = Area_annulus.to('arcmin2')
     Area_total_background = Area_annulus * N_bkg
-    del N_bkg
 
-    background_sample = background_sample.merge(catalog_A[[columns_A['id'],columns_A['pos_err']]],on=columns_A['id'])
+    background_sample = background_sample.merge(catalog_A[[columns_A['id'],columns_A['pos_err']]],
+                                                on=columns_A['id'])
 
-    e_pos = ancillary_sample['e_Pos'].mean()
+    e_pos = ancillary_sample['pos_err'].mean()
     func_fr = define_fr(e_pos,e_pos)
 
 
-    ancillary_sample = ancillary_sample.merge(catalog_B[[columns_B['id'],feature]],on=columns_B['id'])
-    background_sample = background_sample.merge(catalog_B[[columns_B['id'],feature]],on=columns_B['id'])
+    ancillary_sample[columns_B['id']] = ancillary_sample[columns_B['id']].astype(float).astype(catalog_B[columns_B['id']].dtype)
+    ancillary_sample = ancillary_sample.merge(catalog_B[[columns_B['id'],feature]],
+                                              on=columns_B['id'])
+    background_sample[columns_B['id']] = background_sample[columns_B['id']].astype(float).astype(catalog_B[columns_B['id']].dtype)
+    background_sample = background_sample.merge(catalog_B[[columns_B['id'],feature]],
+                                                on=columns_B['id'])
 
     func_nm = surface_density(background_sample[feature],
                               Area_total_background, False)
@@ -221,9 +226,13 @@ def mle(catalog_A, catalog_B, columns_A=None, columns_B=None,
     r_col = 'R_{}'.format(feature)
     df[r_col] = df.groupby(columns_A['id'])[lr_col].apply(reliability)
 
+    df.drop_duplicates(subset=[columns_A['id'],columns_B['id']], keep='first', inplace=True)
+
+#    print(df)
+
     from pandas import DataFrame
     def collapse_table(group):
-        out = DataFrame(columns=['LR','duplicates','LRs'])
+        out = DataFrame(columns=['Reliability','LR','duplicates','duplicates_LR','duplicates_R'])
         out.index.name = columns_B['id']
         if len(group)==1:
             out['Reliability'] = group[r_col]
@@ -243,19 +252,23 @@ def mle(catalog_A, catalog_B, columns_A=None, columns_B=None,
         return out
     df_r = df.groupby(columns_A['id']).apply(collapse_table)
 
-    matching_columns = ['Reliability','LR','duplicates','duplicates_LR','duplicates_R']
+#    print(df_r)
 
+    matching_columns = ['Reliability','LR','duplicates','duplicates_LR','duplicates_R']
+#    return df,df_r
     # output_minimal=True
     if inner_join is True:
         A_matched = catalog_A.set_index(columns_A['id']).loc[df_r.index.droplevel(1)].reset_index()
-        # print(len(A_matched))
-        # A_matched.head()
+#        print(len(df_r.index.droplevel(1)))
+#        print(len(A_matched))
+#        print(A_matched.head())
         B_matched = catalog_B.set_index(columns_B['id']).loc[df_r.index.droplevel(0)].reset_index()
-        # print(len(B_matched))
-        # B_matched.head()
+#        print(len(df_r.index.droplevel(0)))
+#        print(len(B_matched))
+#        print(B_matched.head())
         AB_matched = df_r[matching_columns].reset_index(drop=True)
-        # print(len(AB_matched))
-        # AB_matched.head()
+#        print(len(AB_matched))
+#        print(AB_matched.head())
 
     else:
         # A_matched = catalog_A[['Seq','RAdeg','DEdeg','e_Pos']].reset_index(drop=True)
