@@ -1,6 +1,10 @@
 # -*- coding=utf-8 -*-
 import logging
 
+from astropy.coordinates import Angle, SkyCoord
+from astropy.coordinates import search_around_sky
+
+from ._utils import stats
 
 def gc(A_coord, B_coord, radius):
     '''
@@ -18,23 +22,25 @@ def gc(A_coord, B_coord, radius):
 
     * All outputs (1D arrays) have the same length.
     '''
-    from astropy.coordinates import Angle, SkyCoord
     assert isinstance(A_coord, SkyCoord), "Was expecting an ~astropy.coordinates.SkyCoord instance for 'A_coord'."
     assert isinstance(B_coord, SkyCoord), "Was expecting an ~astropy.coordinates.SkyCoord instance for 'B_coord'."
+
+    try:
+        radius = Angle(radius.arcsec, unit='arcsec')
+    except:
+        radius = Angle(radius, unit='arcsec')
     assert isinstance(radius, Angle), "Was expecting an ~astropy.coordinates.Angle instance for 'radius'"
 
     return _gc_serial(A_coord, B_coord, radius)
 
 
 def _gc_serial(A_coord, B_coord, radius):
-    from astropy.coordinates import search_around_sky
 
     logging.info("Searching B_coord {1} objects, {0} neighbors.".format(len(B_coord),len(A_coord)))
 
     match_A_gc_idx, match_B_gc_idx, match_gc_sep, _d3d = search_around_sky(A_coord, B_coord, radius)
     assert len(match_A_gc_idx) == len(match_B_gc_idx)
 
-    from .utils import stats
     _sts = stats(match_gc_sep.value)
     logging.info("Basic stats of distances between matchings: {}".format(_sts))
 

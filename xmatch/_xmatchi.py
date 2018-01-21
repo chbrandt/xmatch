@@ -5,6 +5,8 @@ from __future__ import absolute_import
 # from booq import log
 # logging = log.init(debug=True)
 import logging
+
+
 def log(string,arg=''):
     '''
     '''
@@ -79,28 +81,62 @@ def skycoords(ra, dec, unit='degree'):
 # from booq.utils import list_contents_are_equal
 from astropy.table import Table
 
-from .nn import nn
-from .gc import gc
+from ._nn import nn
+from ._gc import gc
+
 
 def xmatch(catalog_A, catalog_B, columns_A=None, columns_B=None, radius=None,
-            separation_unit='arcsec', method='gc',
-            parallel=False, nprocs=None, snr_column=None):
+           minimal=True, method='gc', snr_column=None):
     """
+    Returns the cross-matched catalog of same size as 'catalog_A' (left join)
+
+    Output (table) provides the input positional columns as well as the
+    measurements used during the matching process, in particular the separation
+    distances between matching pairs as well as the serialized list of (eventual)
+    duplicated matchings. The (physical) unit for sources separation distances is
+    *arc seconds*.
+
+    'snr_colunm' is used to filter duplicates. Say you want to remove duplicated
+    matches (matches with same target but mulitiple counterparts) based on a
+    a signal-to-noise (snr) measurement for each source, the 'snr_column' column
+    name is to be used.
+
     Input:
-     - catalog_A, catalog_B : ~pandas.DataFrame
-             DFs containing (at least) the columns 'ra','dec','id'
-     - columns_A, columns_B : dict mapping 'ra','dec','id' columns
-            In case catalog(s) have different column names for 'ra','dec','id';
-            e.g, {'ra':'RA', 'dec':'Dec', 'id':'ObjID'}
+     - catalog_{A,B} : ~pandas.DataFrame
+        DFs containing (at least) the columns 'ra','dec','id'
+
+     - columns_{A,B} : dict mapping 'ra','dec','id' columns
+        In case catalog(s) have different column names for 'ra','dec','id';
+        e.g, {'ra':'RA', 'dec':'Dec', 'id':'ObjID'}
+
+     - radius: astropy' angle quantity
+        Define the region size around to search for counterparts (gc only)
+
+     - method: string
+        Options are 'nn' or 'gc' (default)
+
+     - separation_unit: string
+        Unit to use in output catalog for the separation between matches;
+        Options are 'arcsec', 'arcmin', 'degree'
+
+     - minimal : bool
+        If True, output catalog contains only the positional columns
+
+     - snr_column : string
+        Name of the column to use as disambiguation feature when filtering duplicates
 
     Output:
      - matched_catalog : ~pandas.DataFrame
-    """
 
-    output_minimal=True
+    """
+    separation_unit = 'arcsec'
+    parallel = False
+    nprocs = None
+    output_minimal = True
 
     if snr_column:
-        assert snr_column in catalog_B.columns
+        msg = "Column named '{}' not found in ancillary catalog"
+        assert snr_column in catalog_B.columns, msg.format(snr_column)
 
     from pandas import DataFrame
     assert isinstance(catalog_A,DataFrame)

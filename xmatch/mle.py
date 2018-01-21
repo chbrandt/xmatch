@@ -1,5 +1,3 @@
-# -*- coding:utf-8 -*-
-
 '''
 Maximum Likelihood Estimator
 
@@ -42,10 +40,6 @@ $n(m)$ is the normalized magnitude distribution of background sources.
 
 
 LaMassa et al. 2016: http://doi.org/10.3847/0004-637X/817/2/172
-
-DOUBT-1: are we talking about the SAME searched radius --i.e, intersecting
-regions-- or in general, throughout the catalog/sky?!
-
 '''
 import logging
 import astropy
