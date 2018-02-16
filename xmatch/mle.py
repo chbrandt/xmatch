@@ -124,7 +124,7 @@ def mle(catalog_A, catalog_B, columns_A=None, columns_B=None,
     # Alias
     feature = feature_column
 
-    from .xmatchi import xmatch
+    from ._xmatchi import xmatch
     # Notice that the following 'ancillary' and 'background'
     # matched catalogs have the same index.
     # 'xmatch' returns the index of 'catalog_A'.
