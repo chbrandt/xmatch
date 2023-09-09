@@ -86,7 +86,7 @@ from ._gc import gc
 
 
 def xmatch(catalog_A, catalog_B, columns_A=None, columns_B=None, radius=None,
-           minimal=True, method='gc', snr_column=None):
+           method='gc', separation_unit='arcsec', minimal=True, snr_column=None):
     """
     Returns the cross-matched catalog of same size as 'catalog_A' (left join)
 
@@ -129,10 +129,9 @@ def xmatch(catalog_A, catalog_B, columns_A=None, columns_B=None, radius=None,
      - matched_catalog : ~pandas.DataFrame
 
     """
-    separation_unit = 'arcsec'
     parallel = False
     nprocs = None
-    output_minimal = True
+    output_minimal = minimal
 
     if snr_column:
         msg = "Column named '{}' not found in ancillary catalog"
