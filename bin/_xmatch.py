@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-from __future__ import absolute_import, print_function
 import sys
 
 from xmatch import xmatch
@@ -96,18 +95,18 @@ if __name__ == '__main__':
     cat2[cols2['dec']] = coords.icrs.dec
     del coords
 
-df['snr'] = df['nufnu_3keV(erg.s-1.cm-2)'] / df['nufnu_error_3keV(erg.s-1.cm-2)']
+# df['snr'] = df['nufnu_3keV(erg.s-1.cm-2)'] / df['nufnu_error_3keV(erg.s-1.cm-2)']
 
-cols = dict(ra='RA', dec='DEC', id='OBJID')
+# cols = dict(ra='RA', dec='DEC', id='OBJID')
 
-from astropy.coordinates import Angle
-rad = Angle(5,'arcsec')
+# from astropy.coordinates import Angle
+# rad = Angle(5,'arcsec')
 
-from xmatch import xmatch
-%time xcat = xmatch(df, df, cols, cols, radius=rad, snr_column='snr')
-    print('Target catalog:\n', cat1.describe())#include='all'))
-    print('Ancillary catalog:\n', cat2.describe())#include='all'))
-    sys.exit()
-    cat = xmatch(cat1, cols1,
-                 cat2, cols2,
-                 radius=rs, method=method)
+# from xmatch import xmatch
+# %time xcat = xmatch(df, df, cols, cols, radius=rad, snr_column='snr')
+#     print('Target catalog:\n', cat1.describe())#include='all'))
+#     print('Ancillary catalog:\n', cat2.describe())#include='all'))
+#     sys.exit()
+#     cat = xmatch(cat1, cols1,
+#                  cat2, cols2,
+#                  radius=rs, method=method)
