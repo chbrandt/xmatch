@@ -1,0 +1,13 @@
+name: xmatch
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - pip=23.3.2
+  - python=3.12.1
+  - pip:
+      - astropy==6.0.0
+      - bokeh==3.3.2
+      - pandas==2.1.4
+      - xmatch==0.5
+prefix: /opt/miniconda3/envs/xmatch
